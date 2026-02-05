@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 interface Glyph {
   id: number;
@@ -11,7 +11,7 @@ interface Glyph {
   symbol: string;
 }
 
-export function FloatingPetals({ count = 12 }: { count?: number }) {
+export const FloatingPetals = memo(function FloatingPetals({ count = 12 }: { count?: number }) {
   const glyphs = useMemo<Glyph[]>(() => {
     const symbols = ["✟", "☽", "⚔", "♰", "⛧", "☠", "⚜", "◆", "✧", "†"];
 
@@ -55,4 +55,4 @@ export function FloatingPetals({ count = 12 }: { count?: number }) {
       ))}
     </div>
   );
-}
+});
