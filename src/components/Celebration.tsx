@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import confetti from "canvas-confetti";
 
-const HEART_COLORS = ["#e11d48", "#f43f5e", "#fb7185", "#fda4af", "#fecdd3", "#ec4899", "#f472b6"];
+const MONO_COLORS = ["#f4f1e8", "#e8e0d5", "#d4c5b2", "#8b7355", "#4a4a4a", "#1a1a1a"];
 
 let confettiRunning = false;
 
@@ -20,25 +20,27 @@ function fireConfetti() {
 
   const frame = () => {
     confetti({
-      particleCount: 3,
+      particleCount: 2,
       angle: 60,
-      spread: 55,
+      spread: 40,
       origin: { x: 0, y: 0.7 },
-      colors: HEART_COLORS,
+      colors: MONO_COLORS,
       shapes: [heartShape, "circle"],
-      scalar: 1.2,
-      drift: 0.5,
+      scalar: 1.1,
+      drift: 0.2,
+      gravity: 0.6,
     });
 
     confetti({
-      particleCount: 3,
+      particleCount: 2,
       angle: 120,
-      spread: 55,
+      spread: 40,
       origin: { x: 1, y: 0.7 },
-      colors: HEART_COLORS,
+      colors: MONO_COLORS,
       shapes: [heartShape, "circle"],
-      scalar: 1.2,
-      drift: -0.5,
+      scalar: 1.1,
+      drift: -0.2,
+      gravity: 0.6,
     });
 
     if (Date.now() < end) {
@@ -52,12 +54,13 @@ function fireConfetti() {
 
   setTimeout(() => {
     confetti({
-      particleCount: 100,
-      spread: 100,
+      particleCount: 70,
+      spread: 80,
       origin: { x: 0.5, y: 0.5 },
-      colors: HEART_COLORS,
+      colors: MONO_COLORS,
       shapes: [heartShape, "circle"],
-      scalar: 1.5,
+      scalar: 1.3,
+      gravity: 0.5,
     });
   }, 500);
 }
@@ -72,25 +75,25 @@ export function Celebration() {
     }
   }, []);
 
-  const sparkles = useMemo(
+  const motes = useMemo(
     () =>
-      Array.from({ length: 20 }, (_, i) => ({
+      Array.from({ length: 15 }, (_, i) => ({
         id: i,
         left: Math.random() * 100,
         top: Math.random() * 100,
-        delay: Math.random() * 3,
-        size: 4 + Math.random() * 8,
+        delay: Math.random() * 5,
+        size: 2 + Math.random() * 3,
       })),
     [],
   );
 
   const floatingHearts = useMemo(
     () =>
-      Array.from({ length: 8 }, (_, i) => ({
+      Array.from({ length: 6 }, (_, i) => ({
         id: i,
         left: 10 + Math.random() * 80,
-        delay: Math.random() * 2,
-        size: 16 + Math.random() * 24,
+        delay: Math.random() * 3,
+        size: 14 + Math.random() * 20,
       })),
     [],
   );
@@ -101,53 +104,47 @@ export function Celebration() {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden"
+      className="weave-overlay fixed inset-0 z-[100] flex items-center justify-center overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.8 }}
     >
-      {/* Animated gradient background */}
+      {/* Pure black background with subtle shift */}
       <div
         className="animate-gradient-shift absolute inset-0"
         style={{
           background:
-            "linear-gradient(135deg, #2d0a1e 0%, #4a0e2e 25%, #1a0a14 50%, #3d0c24 75%, #2d0a1e 100%)",
+            "linear-gradient(135deg, #0a0a0a 0%, #0f0f0f 25%, #0a0a0a 50%, #0d0d0d 75%, #0a0a0a 100%)",
           backgroundSize: "200% 200%",
         }}
       />
 
-      {/* Sparkles */}
-      {sparkles.map((s) => (
+      {/* Floating dust motes */}
+      {motes.map((m) => (
         <div
-          key={s.id}
-          className="animate-sparkle absolute"
+          key={m.id}
+          className="animate-sparkle absolute rounded-full"
           style={{
-            left: `${s.left}%`,
-            top: `${s.top}%`,
-            width: s.size,
-            height: s.size,
-            animationDelay: `${s.delay}s`,
+            left: `${m.left}%`,
+            top: `${m.top}%`,
+            width: m.size,
+            height: m.size,
+            animationDelay: `${m.delay}s`,
+            background: "rgba(244, 241, 232, 0.3)",
           }}
-        >
-          <div
-            className="h-full w-full rounded-full"
-            style={{
-              background: `radial-gradient(circle, ${HEART_COLORS[s.id % HEART_COLORS.length]}, transparent)`,
-            }}
-          />
-        </div>
+        />
       ))}
 
-      {/* Floating hearts background */}
+      {/* Rising ivory hearts */}
       {floatingHearts.map((h) => (
         <motion.div
           key={h.id}
           className="absolute"
           style={{ left: `${h.left}%` }}
           initial={{ y: "100vh", opacity: 0 }}
-          animate={{ y: "-20vh", opacity: [0, 0.6, 0.6, 0] }}
+          animate={{ y: "-20vh", opacity: [0, 0.15, 0.15, 0] }}
           transition={{
-            duration: 6 + Math.random() * 4,
+            duration: 8 + Math.random() * 5,
             delay: h.delay,
             repeat: Infinity,
             ease: "easeOut",
@@ -155,7 +152,7 @@ export function Celebration() {
         >
           <Heart
             size={h.size}
-            className="text-rose-500/30"
+            style={{ color: "rgba(244, 241, 232, 0.12)" }}
             fill="currentColor"
           />
         </motion.div>
@@ -163,98 +160,94 @@ export function Celebration() {
 
       {/* Main content */}
       <div className="relative z-10 flex flex-col items-center px-8 text-center">
-        {/* Glowing heart icon */}
+        {/* Heart glyph */}
         <motion.div
           className="animate-celebration-glow rounded-full p-8"
-          style={{ marginBottom: 56, background: "radial-gradient(circle, rgba(244,63,94,0.2), transparent)" }}
+          style={{
+            marginBottom: 56,
+            background: "radial-gradient(circle, rgba(139, 115, 85, 0.08), transparent)",
+          }}
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+          transition={{ type: "spring", stiffness: 180, damping: 16, delay: 0.2 }}
         >
           <Heart
-            size={80}
-            className="animate-heartbeat text-rose-500"
+            size={72}
+            className="animate-heartbeat"
             fill="currentColor"
             strokeWidth={0}
+            style={{ color: "#f4f1e8" }}
           />
         </motion.div>
 
-        {/* Main text */}
+        {/* Blackletter title */}
         <motion.h1
-          className="font-display text-5xl font-bold tracking-tight text-rose-100 sm:text-7xl md:text-8xl"
-          style={{ marginBottom: 48 }}
+          className="font-blackletter"
+          style={{ marginBottom: 24, fontSize: "clamp(3rem, 10vw, 5.5rem)", color: "#f4f1e8" }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          Olya said{" "}
-          <span
-            className="animate-shimmer bg-clip-text text-transparent"
-            style={{
-              backgroundImage:
-                "linear-gradient(90deg, #fda4af, #f43f5e, #ec4899, #f43f5e, #fda4af)",
-              backgroundSize: "200% auto",
-            }}
-          >
-            YES!
-          </span>
+          Olya said Yes
         </motion.h1>
 
+        {/* Subtitle in Cinzel caps */}
         <motion.p
-          className="font-script text-2xl text-rose-300/80 sm:text-3xl md:text-4xl"
-          style={{ marginBottom: 56 }}
-          initial={{ opacity: 0, y: 20 }}
+          className="font-heading tracking-[0.2em] uppercase"
+          style={{ marginBottom: 56, fontSize: "clamp(0.75rem, 2vw, 1rem)", color: "#8b7355" }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
         >
-          Happy Valentine's Day, my love 💕
+          a pact sealed in eternity
         </motion.p>
 
-        {/* Hearts row */}
+        {/* Heraldic symbols row */}
         <motion.div
-          className="flex gap-4"
+          className="flex items-center gap-6"
           style={{ marginBottom: 56 }}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1, type: "spring" }}
+          transition={{ delay: 0.9, type: "spring" }}
         >
-          {["💖", "💝", "💗", "💖", "💝"].map((heart, i) => (
+          {["⚔", "♰", "⚜", "♰", "⚔"].map((symbol, i) => (
             <motion.span
               key={i}
-              className="text-4xl sm:text-5xl"
-              animate={{ y: [0, -8, 0] }}
+              style={{ fontSize: "clamp(1.5rem, 4vw, 2.2rem)", color: "rgba(244, 241, 232, 0.25)" }}
+              animate={{ y: [0, -4, 0] }}
               transition={{
-                duration: 1.5,
-                delay: i * 0.15,
+                duration: 2.5,
+                delay: i * 0.25,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
             >
-              {heart}
+              {symbol}
             </motion.span>
           ))}
         </motion.div>
 
-        {/* Fire more confetti button */}
+        {/* More confetti button */}
         <motion.button
           onClick={handleFireMore}
-          className="cursor-pointer rounded-full font-body text-xl tracking-wide text-rose-200 transition-all sm:text-2xl"
+          className="cursor-pointer font-heading tracking-[0.2em] uppercase transition-all"
           style={{
             padding: "18px 56px",
-            background: "linear-gradient(135deg, rgba(225,29,72,0.4), rgba(236,72,153,0.4))",
-            border: "1px solid rgba(244, 63, 94, 0.3)",
-            backdropFilter: "blur(8px)",
+            fontSize: "1.15rem",
+            color: "#0a0a0a",
+            background: "#f4f1e8",
+            border: "none",
           }}
           whileHover={{
-            scale: 1.05,
-            boxShadow: "0 0 30px rgba(244, 63, 94, 0.4)",
+            scale: 1.06,
+            boxShadow: "0 4px 30px rgba(244, 241, 232, 0.15)",
           }}
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2 }}
+          transition={{ delay: 1.1 }}
         >
-          More Love!
+          Once More
         </motion.button>
       </div>
     </motion.div>

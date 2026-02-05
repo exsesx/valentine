@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-interface Petal {
+interface Glyph {
   id: number;
   left: number;
   size: number;
@@ -8,47 +8,48 @@ interface Petal {
   duration: number;
   swayDuration: number;
   opacity: number;
-  emoji: string;
+  symbol: string;
 }
 
 export function FloatingPetals({ count = 12 }: { count?: number }) {
-  const petals = useMemo<Petal[]>(() => {
-    const emojis = ["🌸", "💮", "🏵️", "✿", "❀"];
+  const glyphs = useMemo<Glyph[]>(() => {
+    const symbols = ["✟", "☽", "⚔", "♰", "⛧", "☠", "⚜", "◆", "✧", "†"];
 
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       left: Math.random() * 100,
-      size: 12 + Math.random() * 18,
-      delay: Math.random() * 15,
-      duration: 10 + Math.random() * 10,
-      swayDuration: 3 + Math.random() * 4,
-      opacity: 0.2 + Math.random() * 0.4,
-      emoji: emojis[Math.floor(Math.random() * emojis.length)],
+      size: 10 + Math.random() * 14,
+      delay: Math.random() * 18,
+      duration: 14 + Math.random() * 14,
+      swayDuration: 5 + Math.random() * 5,
+      opacity: 0.06 + Math.random() * 0.12,
+      symbol: symbols[Math.floor(Math.random() * symbols.length)],
     }));
   }, [count]);
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      {petals.map((petal) => (
+      {glyphs.map((g) => (
         <div
-          key={petal.id}
+          key={g.id}
           className="animate-petal-sway absolute"
           style={{
-            left: `${petal.left}%`,
-            animationDuration: `${petal.swayDuration}s`,
-            animationDelay: `${petal.delay}s`,
+            left: `${g.left}%`,
+            animationDuration: `${g.swayDuration}s`,
+            animationDelay: `${g.delay}s`,
           }}
         >
           <div
-            className="animate-petal-fall"
+            className="animate-petal-fall font-heading"
             style={{
-              fontSize: `${petal.size}px`,
-              opacity: petal.opacity,
-              animationDuration: `${petal.duration}s`,
-              animationDelay: `${petal.delay}s`,
+              fontSize: `${g.size}px`,
+              opacity: g.opacity,
+              animationDuration: `${g.duration}s`,
+              animationDelay: `${g.delay}s`,
+              color: "#f4f1e8",
             }}
           >
-            {petal.emoji}
+            {g.symbol}
           </div>
         </div>
       ))}
