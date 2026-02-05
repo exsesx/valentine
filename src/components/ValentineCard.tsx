@@ -4,11 +4,13 @@ import { Heart } from "lucide-react";
 import { EvadeButton } from "./EvadeButton";
 import { Celebration } from "./Celebration";
 import { FloatingPetals } from "./FloatingPetals";
+import { useIsTouchDevice } from "../hooks/useIsTouchDevice";
 
 type GameState = "question" | "celebration";
 
 export function ValentineCard() {
   const [state, setState] = useState<GameState>("question");
+  const isTouch = useIsTouchDevice();
 
   const handleYes = useCallback(() => {
     setState("celebration");
@@ -136,28 +138,44 @@ export function ValentineCard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.6 }}
         >
-          <motion.button
-            onClick={handleYes}
-            onTouchEnd={handleYesTouch}
-            className="relative cursor-pointer font-heading tracking-[0.2em] uppercase"
-            style={{
-              padding: "18px 56px",
-              fontSize: "1.15rem",
-              color: "#0a0a0a",
-              background: "#f4f1e8",
-              border: "none",
-              letterSpacing: "0.2em",
-              touchAction: "manipulation",
-              WebkitTapHighlightColor: "transparent",
-            }}
-            whileHover={{
-              scale: 1.06,
-              boxShadow: "0 4px 30px rgba(244, 241, 232, 0.15)",
-            }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Yes
-          </motion.button>
+          {isTouch ? (
+            <button
+              onTouchEnd={handleYesTouch}
+              className="relative cursor-pointer font-heading tracking-[0.2em] uppercase"
+              style={{
+                padding: "18px 56px",
+                fontSize: "1.15rem",
+                color: "#0a0a0a",
+                background: "#f4f1e8",
+                border: "none",
+                letterSpacing: "0.2em",
+                touchAction: "manipulation",
+                WebkitTapHighlightColor: "transparent",
+              }}
+            >
+              Yes
+            </button>
+          ) : (
+            <motion.button
+              onClick={handleYes}
+              className="relative cursor-pointer font-heading tracking-[0.2em] uppercase"
+              style={{
+                padding: "18px 56px",
+                fontSize: "1.15rem",
+                color: "#0a0a0a",
+                background: "#f4f1e8",
+                border: "none",
+                letterSpacing: "0.2em",
+              }}
+              whileHover={{
+                scale: 1.06,
+                boxShadow: "0 4px 30px rgba(244, 241, 232, 0.15)",
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Yes
+            </motion.button>
+          )}
 
           <EvadeButton />
         </motion.div>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import confetti from "canvas-confetti";
+import { useIsTouchDevice } from "../hooks/useIsTouchDevice";
 
 const MONO_COLORS = ["#f4f1e8", "#e8e0d5", "#d4c5b2", "#8b7355", "#4a4a4a", "#1a1a1a"];
 
@@ -66,6 +67,7 @@ function fireConfetti() {
 }
 
 export function Celebration() {
+  const isTouch = useIsTouchDevice();
   const hasLaunched = useRef(false);
 
   useEffect(() => {
@@ -233,30 +235,45 @@ export function Celebration() {
         </motion.div>
 
         {/* More confetti button */}
-        <motion.button
-          onClick={handleFireMore}
-          onTouchEnd={handleFireMoreTouch}
-          className="cursor-pointer font-heading tracking-[0.2em] uppercase transition-all"
-          style={{
-            padding: "18px 56px",
-            fontSize: "1.15rem",
-            color: "#0a0a0a",
-            background: "#f4f1e8",
-            border: "none",
-            touchAction: "manipulation",
-            WebkitTapHighlightColor: "transparent",
-          }}
-          whileHover={{
-            scale: 1.06,
-            boxShadow: "0 4px 30px rgba(244, 241, 232, 0.15)",
-          }}
-          whileTap={{ scale: 0.95 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1 }}
-        >
-          Celebrate
-        </motion.button>
+        {isTouch ? (
+          <button
+            onTouchEnd={handleFireMoreTouch}
+            className="cursor-pointer font-heading tracking-[0.2em] uppercase"
+            style={{
+              padding: "18px 56px",
+              fontSize: "1.15rem",
+              color: "#0a0a0a",
+              background: "#f4f1e8",
+              border: "none",
+              touchAction: "manipulation",
+              WebkitTapHighlightColor: "transparent",
+            }}
+          >
+            Celebrate
+          </button>
+        ) : (
+          <motion.button
+            onClick={handleFireMore}
+            className="cursor-pointer font-heading tracking-[0.2em] uppercase transition-all"
+            style={{
+              padding: "18px 56px",
+              fontSize: "1.15rem",
+              color: "#0a0a0a",
+              background: "#f4f1e8",
+              border: "none",
+            }}
+            whileHover={{
+              scale: 1.06,
+              boxShadow: "0 4px 30px rgba(244, 241, 232, 0.15)",
+            }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1 }}
+          >
+            Celebrate
+          </motion.button>
+        )}
       </div>
     </motion.div>
   );
