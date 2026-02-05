@@ -237,6 +237,8 @@ export function Celebration() {
             color: "#0a0a0a",
             background: "#f4f1e8",
             border: "none",
+            touchAction: "manipulation",
+            WebkitTapHighlightColor: "transparent",
           }}
           whileHover={{
             scale: 1.06,

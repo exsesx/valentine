@@ -141,6 +141,8 @@ export function ValentineCard() {
               background: "#f4f1e8",
               border: "none",
               letterSpacing: "0.2em",
+              touchAction: "manipulation",
+              WebkitTapHighlightColor: "transparent",
             }}
             whileHover={{
               scale: 1.06,

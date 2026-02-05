@@ -124,8 +124,10 @@ export function EvadeButton({ onGiveUp }: EvadeButtonProps) {
     jumpAway();
   }, [isTouch, jumpAway]);
 
-  const handleMobileTap = useCallback(() => {
+  const handleMobileTap = useCallback((e: React.PointerEvent | React.MouseEvent) => {
     if (!isTouch) return;
+
+    e.preventDefault();
 
     const nextTap = tapCount + 1;
     setTapCount(nextTap);
@@ -153,9 +155,9 @@ export function EvadeButton({ onGiveUp }: EvadeButtonProps) {
     return (
       <motion.button
         ref={buttonRef}
-        onClick={handleMobileTap}
+        onPointerDown={handleMobileTap}
         className="font-heading tracking-[0.2em] uppercase transition-all"
-        style={buttonStyle}
+        style={{ ...buttonStyle, touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
         whileTap={{ scale: 0.95 }}
         animate={{
           opacity: tapCount >= MOBILE_PHRASES.length - 1 ? 0.3 : 0.7,
@@ -180,6 +182,8 @@ export function EvadeButton({ onGiveUp }: EvadeButtonProps) {
         zIndex: 50,
         willChange: "transform",
         cursor: activated ? "default" : "pointer",
+        touchAction: "manipulation",
+        WebkitTapHighlightColor: "transparent",
       }}
       whileHover={!activated ? { borderColor: "rgba(244, 241, 232, 0.35)", color: "rgba(244, 241, 232, 0.6)" } : undefined}
       animate={
