@@ -102,6 +102,11 @@ export function Celebration() {
     fireConfetti();
   }, []);
 
+  const handleFireMoreTouch = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    fireConfetti();
+  }, []);
+
   return (
     <motion.div
       className="weave-overlay fixed inset-0 z-[100] flex items-center justify-center overflow-hidden"
@@ -230,6 +235,7 @@ export function Celebration() {
         {/* More confetti button */}
         <motion.button
           onClick={handleFireMore}
+          onTouchEnd={handleFireMoreTouch}
           className="cursor-pointer font-heading tracking-[0.2em] uppercase transition-all"
           style={{
             padding: "18px 56px",

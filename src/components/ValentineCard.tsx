@@ -14,6 +14,11 @@ export function ValentineCard() {
     setState("celebration");
   }, []);
 
+  const handleYesTouch = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    setState("celebration");
+  }, []);
+
   if (state === "celebration") {
     return <Celebration />;
   }
@@ -133,6 +138,7 @@ export function ValentineCard() {
         >
           <motion.button
             onClick={handleYes}
+            onTouchEnd={handleYesTouch}
             className="relative cursor-pointer font-heading tracking-[0.2em] uppercase"
             style={{
               padding: "18px 56px",
